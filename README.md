@@ -10,6 +10,8 @@ A datetime formatting service implemented as an MCP server for the Claude Deskto
 
 > **Note**: This package has been tested only on macOS. Windows compatibility has not been verified.
 
+<a href="https://glama.ai/mcp/servers/y4oh57n2vq"><img width="380" height="200" src="https://glama.ai/mcp/servers/y4oh57n2vq/badge" /></a>
+
 ## Prerequisites
 
 Before using mcp-datetime, ensure you have the following tools installed:
