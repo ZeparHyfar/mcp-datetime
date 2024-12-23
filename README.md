@@ -1,5 +1,6 @@
 # mcp-datetime
 
+[![smithery badge](https://smithery.ai/badge/mcp-datetime)](https://smithery.ai/server/mcp-datetime)
 [![Python Version](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
 [![MCP Version](https://img.shields.io/badge/mcp-1.1.1-green.svg)](https://github.com/anaisbetts/mcp)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -57,6 +58,15 @@ Config file location (macOS):
 
 ## About Installation
 
+### Installing via Smithery
+
+To install Datetime Formatting Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/mcp-datetime):
+
+```bash
+npx -y @smithery/cli install mcp-datetime --client claude
+```
+
+### Installing Manually
 If you need to install the package directly (e.g., for development or source code inspection), you can use one of these methods:
 
 - Install from PyPI
