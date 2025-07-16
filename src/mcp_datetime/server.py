@@ -25,6 +25,7 @@ def format_datetime(format_type: str) -> str:
         "date": "%Y-%m-%d",  # 2024-12-10
         "date_slash": "%Y/%m/%d",  # 2024/12/10
         "date_jp": "%Y年%m月%d日",  # 2024年12月10日
+        "date_de": "%d.%m.%Y",  # 10.12.2024
         # Basic datetime formats
         "datetime": "%Y-%m-%d %H:%M:%S",  # 2024-12-10 00:54:01
         "datetime_jp": "%Y年%m月%d日 %H時%M分%S秒",  # 2024年12月10日 00時54分01秒
