@@ -18,6 +18,10 @@ Before using mcp-datetime, ensure you have the following tools installed:
 - uv (Python package installer)
 - uvx (Python package runner)
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/zeparhyfar-mcp-datetime).
+
 ## Features
 
 - ✨ Support for various datetime formats
