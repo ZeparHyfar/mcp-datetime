@@ -1,18 +1,22 @@
 [project]
 name = "mcp-datetime"
-version = "0.1.5"
+version = "0.2.0"
 description = "A MCP server for datetime formatting and file name generation."
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = ["mcp>=1.1.1,<2"]
+requires-python = ">=3.10"
+dependencies = ["mcp>=2.3,<3"]
 license = "MIT"
 keywords = ["claude", "mcp", "datetime", "time", "format", "timezone"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 
 [[project.authors]]
@@ -26,11 +30,15 @@ build-backend = "hatchling.build"
 [project.scripts]
 mcp-datetime = "mcp_datetime:main"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-    "pytest>=8.0.0",
-    "pylint>=3.0.3",
+    "pytest>=8",
+    "anyio>=4",
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
 [project.urls]
-Repository = "https://github.com/ZeparHyfar/mcp-datetime.git"
+Repository = "https://github.com/ZeparHyfar/mcp-datetime"
+Changelog = "https://github.com/ZeparHyfar/mcp-datetime/blob/main/CHANGELOG.md"

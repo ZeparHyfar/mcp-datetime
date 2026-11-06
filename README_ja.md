@@ -1,22 +1,22 @@
 # mcp-datetime
 
-[![Python Version](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![MCP Version](https://img.shields.io/badge/mcp-1.1.1-green.svg)](https://github.com/anaisbetts/mcp)
+[![PyPI](https://img.shields.io/pypi/v/mcp-datetime.svg)](https://pypi.org/project/mcp-datetime/)
+[![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue.svg)](https://www.python.org/downloads/)
+[![MCP SDK](https://img.shields.io/badge/mcp-2.x-green.svg)](https://github.com/modelcontextprotocol/python-sdk)
+[![test](https://github.com/ZeparHyfar/mcp-datetime/actions/workflows/test.yml/badge.svg)](https://github.com/ZeparHyfar/mcp-datetime/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 [English](README.md) | 日本語
 
 Claude Desktop Application用のMCPサーバーとして実装された日時フォーマットサービスです。様々な形式での日時文字列生成をサポートしています。
 
-> **注意**: このパッケージはmacOSでのみ動作確認を行っています。Windowsでの互換性は未確認です。
+> **注意**: 普段の利用はmacOSです。自動テストはLinuxとWindowsでも実行しています。
 
 ## 前提条件
 
 mcp-datetimeを使用する前に、以下のツールがインストールされていることを確認してください：
 
-- Python 3.12以降
-- uv（Pythonパッケージインストーラー）
-- uvx（Pythonパッケージ実行ツール）
+- [uv](https://docs.astral.sh/uv/)（`uvx` を含みます）。必要に応じてuvxが適切なPython（3.10以降）を取得します。
 
 ## 特徴
 
@@ -33,9 +33,15 @@ mcp-datetimeを使用する前に、以下のツールがインストールさ�
 このサーバーは1つのツールを実装しています：
 
 - `get_datetime`: 現在の日時を様々な形式で取得
-  - "format"を必須の文字列引数として受け取ります
+  - "format"を必須の文字列引数として受け取ります（[サポートされている形式](#サポートされている形式)を参照）
   - 指定された形式でフォーマットされた日時文字列を返します
   - 標準形式、日本語形式、ISO形式など、複数の形式タイプをサポート
+
+## Claude Codeでの使用方法
+
+```bash
+claude mcp add mcp-datetime -- uvx mcp-datetime
+```
 
 ## Claude Desktop Appでの使用方法
 
@@ -79,18 +85,21 @@ mcp-datetimeを使用する前に、以下のツールがインストールさ�
   {
     "mcpServers": {
       "mcp-datetime": {
-        "command": "python",
-        "args": ["-m", "mcp_datetime"],
-        "env": {
-          "PYTHON": "/path/to/your/python"
-        }
+        "command": "/path/to/your/python",
+        "args": ["-m", "mcp_datetime"]
       }
     }
   }
   ```
 
-  "/path/to/your/python"は実際のPythonインタプリタのパスに置き換えてください
-  > （例："/usr/local/bin/python3" や "/Users/username/.pyenv/versions/3.12.0/bin/python3"）
+  "/path/to/your/python"はパッケージをインストールしたPythonインタプリタのパスに置き換えてください
+  > （例："/usr/local/bin/python3" や "/Users/username/.pyenv/versions/3.13.0/bin/python3"）
+
+- テストの実行
+
+  ```bash
+  uv run --group dev pytest
+  ```
 
 ## 基本的な使用例
 
@@ -163,7 +172,7 @@ MCPサーバーはstdioを介して実行されるため、デバッグが難し
 
   ```
   git clone https://github.com/ZeparHyfar/mcp-datetime.git
-  npx @modelcontextprotocol/inspector uvx --directory ./mcp-datetime run mcp-datetime
+  npx @modelcontextprotocol/inspector uv --directory ./mcp-datetime run mcp-datetime
   ```
 
 ## ライセンス

@@ -1,22 +1,22 @@
 # mcp-datetime
 
-[![Python Version](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
-[![MCP Version](https://img.shields.io/badge/mcp-1.1.1-green.svg)](https://github.com/anaisbetts/mcp)
+[![PyPI](https://img.shields.io/pypi/v/mcp-datetime.svg)](https://pypi.org/project/mcp-datetime/)
+[![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue.svg)](https://www.python.org/downloads/)
+[![MCP SDK](https://img.shields.io/badge/mcp-2.x-green.svg)](https://github.com/modelcontextprotocol/python-sdk)
+[![test](https://github.com/ZeparHyfar/mcp-datetime/actions/workflows/test.yml/badge.svg)](https://github.com/ZeparHyfar/mcp-datetime/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 English | [日本語](README_ja.md)
 
 A datetime formatting service implemented as an MCP server for the Claude Desktop Application. Supports generation of datetime strings in various formats.
 
-> **Note**: This package has been tested only on macOS. Windows compatibility has not been verified.
+> **Note**: Day-to-day use is on macOS. Automated tests also run on Linux and Windows.
 
 ## Prerequisites
 
 Before using mcp-datetime, ensure you have the following tools installed:
 
-- Python 3.12 or later
-- uv (Python package installer)
-- uvx (Python package runner)
+- [uv](https://docs.astral.sh/uv/) (provides `uvx`). uvx downloads a suitable Python (3.10 or later) if needed.
 
 ## Features
 
@@ -33,9 +33,15 @@ Before using mcp-datetime, ensure you have the following tools installed:
 The server implements one tool:
 
 - `get_datetime`: Get current date and time in various formats
-  - Takes "format" as a required string argument
+  - Takes "format" as a required string argument (see [Supported Formats](#supported-formats))
   - Returns formatted datetime string based on specified format
   - Supports multiple format types including standard, Japanese, and ISO formats
+
+## Usage with Claude Code
+
+```bash
+claude mcp add mcp-datetime -- uvx mcp-datetime
+```
 
 ## Usage with Claude Desktop App
 
@@ -79,18 +85,21 @@ If you need to install the package directly (e.g., for development or source cod
   {
     "mcpServers": {
       "mcp-datetime": {
-        "command": "python",
-        "args": ["-m", "mcp_datetime"],
-        "env": {
-          "PYTHON": "/path/to/your/python"
-        }
+        "command": "/path/to/your/python",
+        "args": ["-m", "mcp_datetime"]
       }
     }
   }
   ```
 
-  Replace "/path/to/your/python" with your actual Python interpreter path
-  > e.g., "/usr/local/bin/python3" or "/Users/username/.pyenv/versions/3.12.0/bin/python3"
+  Replace "/path/to/your/python" with the Python interpreter where you installed the package
+  > e.g., "/usr/local/bin/python3" or "/Users/username/.pyenv/versions/3.13.0/bin/python3"
+
+- Run the tests
+
+  ```bash
+  uv run --group dev pytest
+  ```
 
 ## Basic Examples
 
@@ -163,7 +172,7 @@ Since MCP servers run over stdio, debugging can be challenging. We recommend usi
 
   ```
   git clone https://github.com/ZeparHyfar/mcp-datetime.git
-  npx @modelcontextprotocol/inspector uvx --directory ./mcp-datetime run mcp-datetime
+  npx @modelcontextprotocol/inspector uv --directory ./mcp-datetime run mcp-datetime
   ```
 
 ## License

@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.2.0] - 2026-11-07
+### Changed
+- Rewrote the server with `MCPServer` (the successor of FastMCP) from mcp 2.x. Requires `mcp>=2.3,<3`.
+- Supported Python versions are now 3.10 to 3.14 (was 3.12 or later).
+- The tool name `get_datetime`, its `format` argument and the existing 18 formats are unchanged.
+- An unknown format now returns an error that lists the available formats.
+
+### Added
+- Tests and a GitHub Actions workflow.
+
+### Fixed
+- An unknown `format` value containing CR/LF could add forged lines to the server log (#8). The value is now quoted with `repr` and is no longer logged by this package.
+
+### Removed
+- The stray top-level `__init__.py`.
+
 ## [0.1.5] - 2026-11-07
 ### Fixed
 - Pinned the `mcp` dependency to `<2`. mcp 2.x removed the low-level `Server.list_tools` decorator, so 0.1.4 failed to start when installed with uvx.

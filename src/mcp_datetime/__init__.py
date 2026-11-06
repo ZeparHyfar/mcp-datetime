@@ -1,12 +1,5 @@
-import asyncio
+"""mcp-datetime: an MCP server that returns the current date and time in fixed formats."""
 
-from . import server
+from .server import main
 
-
-def main():
-    """Main entry point for the package."""
-    asyncio.run(server.main())
-
-
-# Optionally expose other important items at package level
-__all__ = ["main", "server"]
+__all__ = ["main"]
