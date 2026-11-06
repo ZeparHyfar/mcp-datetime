@@ -2,6 +2,10 @@
 
 ## [0.3.0] - Unreleased
 ### Added
+- New tool `convert_time`: convert a time or date-time between timezones, with weekday, UTC offset, time difference and a note for times skipped or repeated by DST.
+- New tool `shift_datetime`: add or subtract years, months, weeks, days, hours, minutes and seconds, for the past and the future. Month ends are kept in range.
+- New tool `get_datetime_info`: weekday (English and Japanese), Japanese era, ISO week, day of year, quarter, leap year, UTC offset, DST, Unix time, and the difference in days from a reference date (e.g. days until a date).
+- Date-time input for the new tools accepts ISO 8601, `2024/12/10`, `2024年12月10日 14時30分`, Japanese era (`令和6年12月10日`, `R6.12.10`) and a time only (`14:30`). Full-width digits are accepted.
 - `get_datetime` takes an optional `timezone` argument (IANA name such as `Asia/Tokyo` or `UTC`). Without it, the local timezone is used as before.
 - `format` accepts a custom pattern when it contains `%`: strftime directives, `%-m`-style directives without leading zeros that also work on Windows, and Japanese directives `%Je` `%JE` `%Jy` `%JY` `%Ja` `%JA`.
 - New formats: `date_wareki`, `datetime_wareki`, `date_wareki_short`, `date_jp_weekday`, `datetime_jp_weekday`, `weekday_jp`. Japanese era is supported from 1873-01-01.

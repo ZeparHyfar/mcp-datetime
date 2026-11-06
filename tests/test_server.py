@@ -174,7 +174,12 @@ def anyio_backend():
 async def test_tool_is_listed_with_format_argument():
     async with Client(mcp) as client:
         tools = (await client.list_tools()).tools
-    assert [t.name for t in tools] == ["get_datetime"]
+    assert [t.name for t in tools] == [
+        "get_datetime",
+        "convert_time",
+        "shift_datetime",
+        "get_datetime_info",
+    ]
     tool = tools[0]
     assert tool.input_schema["required"] == ["format"]
     assert "timezone" in tool.input_schema["properties"]

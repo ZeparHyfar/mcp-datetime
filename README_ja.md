@@ -31,12 +31,23 @@ mcp-datetimeを使用する前に、以下のツールがインストールさ�
 
 ### ツール
 
-このサーバーは1つのツールを実装しています：
+このサーバーは4つのツールを実装しています：
 
 - `get_datetime`: 現在の日時を様々な形式で取得
   - `format`（必須）: 形式名（[サポートされている形式](#サポートされている形式)を参照）、または `%` を含む自由な書式（[自由な書式](#自由な書式)を参照）
   - `timezone`（省略可）: `Asia/Tokyo`、`UTC`、`America/New_York` などのIANAタイムゾーン名。省略した場合は実行しているマシンのタイムゾーンを使います
   - 指定された形式でフォーマットされた日時文字列を返します
+- `convert_time`: 時刻・日時をタイムゾーン間で変換
+  - `time`（必須）、`target_timezone`（必須）、`source_timezone`（省略可、省略時はローカル）、`format`（省略可、省略時は `datetime`）
+  - 変換元と変換先のタイムゾーン・UTCとの差・曜日と、時差を返します。夏時間の切り替えで存在しない時刻や2回ある時刻になる場合は注意書きを付けます
+- `shift_datetime`: 日時の加算・減算（過去はマイナスで指定）
+  - `years`、`months`、`weeks`、`days`、`hours`、`minutes`、`seconds`、省略可の `base`（省略時は現在）、`timezone`、`format`
+  - 月・年の加算で月末を超える場合は月末にそろえます（2024-01-31 + 1か月 = 2024-02-29）。日単位は時刻を保ち、時間単位は経過時間として計算します
+- `get_datetime_info`: 日時の詳細と、別の日時との差
+  - 省略可の `datetime`（省略時は現在）、`reference`（省略時は現在）、`timezone`
+  - ISO形式の日時、タイムゾーン、UTCとの差、夏時間かどうか、Unix時刻、曜日（英語・日本語）、和暦、年の何日目、ISO週番号、四半期、うるう年かどうか、その月の日数、基準との日数・秒数の差（例: 「15日後」）を返します
+
+これらのツールの日時の入力には、`2024-12-10`、`2024-12-10 14:30`、`2024-12-10T14:30:00+09:00`、`2024/12/10`、`2024年12月10日 14時30分`、`令和6年12月10日` や `R6.12.10` などの和暦、`14:30`（今日の時刻）が使えます。
 
 ## Claude Codeでの使用方法
 
@@ -140,6 +151,18 @@ uv cache clean mcp-datetime
   # 自由な書式
   call datetime-service.get_datetime {"format": "%Y/%-m/%-d (%a)"}
   # 結果: 2024/12/10 (Tue)
+
+  # タイムゾーンの変換
+  call datetime-service.convert_time {"time": "2024-12-10 14:30", "source_timezone": "Asia/Tokyo", "target_timezone": "America/New_York"}
+  # 結果: 変換元 2024-12-10 14:30:00（+09:00）、変換先 2024-12-10 00:30:00（-05:00）、時差 -14:00
+
+  # 1か月後を和暦で
+  call datetime-service.shift_datetime {"base": "令和6年1月31日", "months": 1, "format": "date_wareki"}
+  # 結果: 令和6年2月29日
+
+  # ある日まであと何日
+  call datetime-service.get_datetime_info {"datetime": "2024-12-25", "reference": "2024-12-10"}
+  # 結果: ... "days_from_reference": 15, "relative": "in 15 days", "relative_jp": "15日後" ...
   ```
 
 - Claudeデスクトップアプリのプロンプト例

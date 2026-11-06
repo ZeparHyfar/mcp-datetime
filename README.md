@@ -31,12 +31,23 @@ Before using mcp-datetime, ensure you have the following tools installed:
 
 ### Tools
 
-The server implements one tool:
+The server implements four tools:
 
 - `get_datetime`: Get current date and time in various formats
   - `format` (required): a format name (see [Supported Formats](#supported-formats)) or a custom pattern containing `%` (see [Custom Patterns](#custom-patterns))
   - `timezone` (optional): an IANA timezone name such as `Asia/Tokyo`, `UTC` or `America/New_York`. When omitted, the local timezone of the machine is used
   - Returns formatted datetime string based on specified format
+- `convert_time`: Convert a time or date-time between timezones
+  - `time` (required), `target_timezone` (required), `source_timezone` (optional, local by default), `format` (optional, `datetime` by default)
+  - Returns both sides with timezone, UTC offset and weekday, plus the time difference. Adds a note when the time is skipped or repeated by a daylight saving time change
+- `shift_datetime`: Add or subtract time (negative numbers for the past)
+  - `years`, `months`, `weeks`, `days`, `hours`, `minutes`, `seconds`, and optional `base` (now by default), `timezone`, `format`
+  - Months and years keep the end of the month in range (2024-01-31 + 1 month = 2024-02-29). Days keep the wall time; hours are elapsed time
+- `get_datetime_info`: Details of a date-time and its difference from another
+  - Optional `datetime` (now by default), `reference` (now by default), `timezone`
+  - Returns ISO date-time, timezone, UTC offset, DST, Unix time, weekday (English and Japanese), Japanese era, day of year, ISO week, quarter, leap year, days in the month, and days/seconds from the reference (e.g. "in 15 days")
+
+Date-time input of these tools accepts `2024-12-10`, `2024-12-10 14:30`, `2024-12-10T14:30:00+09:00`, `2024/12/10`, `2024年12月10日 14時30分`, Japanese era such as `令和6年12月10日` or `R6.12.10`, and a time only such as `14:30` (today).
 
 ## Usage with Claude Code
 
@@ -140,6 +151,18 @@ If you need to install the package directly (e.g., for development or source cod
   # Custom pattern
   call datetime-service.get_datetime {"format": "%Y/%-m/%-d (%a)"}
   # Result: 2024/12/10 (Tue)
+
+  # Convert between timezones
+  call datetime-service.convert_time {"time": "2024-12-10 14:30", "source_timezone": "Asia/Tokyo", "target_timezone": "America/New_York"}
+  # Result: source 2024-12-10 14:30:00 (+09:00), target 2024-12-10 00:30:00 (-05:00), time_difference -14:00
+
+  # One month later, in Japanese era
+  call datetime-service.shift_datetime {"base": "令和6年1月31日", "months": 1, "format": "date_wareki"}
+  # Result: 令和6年2月29日
+
+  # Days until a date
+  call datetime-service.get_datetime_info {"datetime": "2024-12-25", "reference": "2024-12-10"}
+  # Result: ... "days_from_reference": 15, "relative": "in 15 days", "relative_jp": "15日後" ...
   ```
 
 - Claude Desktop App prompt examples
