@@ -1,10 +1,10 @@
 [project]
 name = "mcp-datetime"
-version = "0.1.4"
+version = "0.1.5"
 description = "A MCP server for datetime formatting and file name generation."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["mcp>=1.1.1"]
+dependencies = ["mcp>=1.1.1,<2"]
 license = "MIT"
 keywords = ["claude", "mcp", "datetime", "time", "format", "timezone"]
 classifiers = [

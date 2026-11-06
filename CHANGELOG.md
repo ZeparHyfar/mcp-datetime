@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.5] - 2026-11-07
+### Fixed
+- Pinned the `mcp` dependency to `<2`. mcp 2.x removed the low-level `Server.list_tools` decorator, so 0.1.4 failed to start when installed with uvx.
+
 ## [0.1.4] - 2024-12-13
 ### Changed
 - Updated documentation to clarify macOS-only testing status
