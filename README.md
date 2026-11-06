@@ -61,6 +61,16 @@ Config file location (macOS):
 }
 ```
 
+## Updating to the Latest Version
+
+uvx reuses the version it has already cached, so it may keep starting an older version after a new release. To switch to the latest version, clear the cache once and then restart Claude Code or Claude Desktop:
+
+```bash
+uv cache clean mcp-datetime
+```
+
+The next start downloads the latest version. To always check for the latest version at every start, use `mcp-datetime@latest` instead of `mcp-datetime` in the commands and config above.
+
 ## About Installation
 
 If you need to install the package directly (e.g., for development or source code inspection), you can use one of these methods:
