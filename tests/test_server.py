@@ -148,7 +148,9 @@ def test_timezone_for_current_time():
     assert format_datetime("%z", timezone="UTC") == "+0000"
 
 
-@pytest.mark.parametrize("tz", ["Mars/Olympus", "../etc/passwd", "JST\nINFO:fake"])
+@pytest.mark.parametrize(
+    "tz", ["Mars/Olympus", "../etc/passwd", "JST\nINFO:fake", "C:\\Windows", "Asia//Tokyo", "a" * 300]
+)
 def test_unknown_timezone_is_error(tz):
     with pytest.raises(ValueError, match="Unknown timezone") as exc_info:
         format_datetime("date", FIXED, timezone=tz)

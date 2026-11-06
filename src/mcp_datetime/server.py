@@ -68,6 +68,7 @@ _NO_PAD = set("dmHIMSjy")
 
 _DIRECTIVE = re.compile(r"%(?:J.|-.|.)", re.DOTALL)
 MAX_PATTERN_LENGTH = 200
+_TIMEZONE_NAME = re.compile(r"[A-Za-z0-9_+\-]+(?:/[A-Za-z0-9_+\-]+)*")
 
 DEFAULT_FORMAT_HINT = "a format name such as 'datetime', or a pattern containing '%'"
 
@@ -120,13 +121,19 @@ def resolve_timezone(name: str | None) -> TzInfo | None:
     """Return the IANA timezone ``name``, or None for the local timezone."""
     if name is None or not name.strip():
         return None
+    message = (
+        f"Unknown timezone: {name!r}. Use an IANA name such as 'Asia/Tokyo', 'UTC' "
+        "or 'America/New_York'."
+    )
+    key = name.strip()
+    # Check the characters first: on Windows, ZoneInfo raises OSError with the file path
+    # for names such as one containing a newline.
+    if not _TIMEZONE_NAME.fullmatch(key):
+        raise ValueError(message)
     try:
-        return ZoneInfo(name.strip())
-    except (ZoneInfoNotFoundError, ValueError) as e:
-        raise ValueError(
-            f"Unknown timezone: {name!r}. Use an IANA name such as 'Asia/Tokyo', 'UTC' "
-            "or 'America/New_York'."
-        ) from e
+        return ZoneInfo(key)
+    except (ZoneInfoNotFoundError, ValueError, OSError) as e:
+        raise ValueError(message) from e
 
 
 def format_datetime(
