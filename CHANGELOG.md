@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.3.0] - Unreleased
+## [0.3.0] - 2026-11-07
 ### Added
 - New tool `convert_time`: convert a time or date-time between timezones, with weekday, UTC offset, time difference and a note for times skipped or repeated by DST.
 - New tool `shift_datetime`: add or subtract years, months, weeks, days, hours, minutes and seconds, for the past and the future. Month ends are kept in range.
