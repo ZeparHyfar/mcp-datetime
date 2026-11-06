@@ -21,9 +21,10 @@ mcp-datetimeを使用する前に、以下のツールがインストールさ�
 ## 特徴
 
 - ✨ 各種の日時フォーマットをサポート
-- 🇯🇵 日本語対応
+- 🇯🇵 日本語対応（和暦・日本語の曜日を含む）
+- 🧩 macOS・Linux・Windowsで同じ結果になる自由な書式
 - 📁 ファイル名生成に最適化された形式
-- 🌏 タイムゾーンの正確な処理
+- 🌏 IANAのタイムゾーンを指定可能（`Asia/Tokyo`、`UTC`、`America/New_York` など）
 - 🔧 Claude Desktop Appとのシームレスな連携
 
 ## MCPサーバーコンポーネント
@@ -33,9 +34,9 @@ mcp-datetimeを使用する前に、以下のツールがインストールさ�
 このサーバーは1つのツールを実装しています：
 
 - `get_datetime`: 現在の日時を様々な形式で取得
-  - "format"を必須の文字列引数として受け取ります（[サポートされている形式](#サポートされている形式)を参照）
+  - `format`（必須）: 形式名（[サポートされている形式](#サポートされている形式)を参照）、または `%` を含む自由な書式（[自由な書式](#自由な書式)を参照）
+  - `timezone`（省略可）: `Asia/Tokyo`、`UTC`、`America/New_York` などのIANAタイムゾーン名。省略した場合は実行しているマシンのタイムゾーンを使います
   - 指定された形式でフォーマットされた日時文字列を返します
-  - 標準形式、日本語形式、ISO形式など、複数の形式タイプをサポート
 
 ## Claude Codeでの使用方法
 
@@ -127,6 +128,18 @@ uv cache clean mcp-datetime
   # ファイル名形式
   call datetime-service.get_datetime {"format": "filename_md"}
   # 結果: 20241210005401.md
+
+  # 和暦
+  call datetime-service.get_datetime {"format": "date_wareki"}
+  # 結果: 令和6年12月10日
+
+  # 別のタイムゾーン
+  call datetime-service.get_datetime {"format": "datetime", "timezone": "America/New_York"}
+  # 結果: 2024-12-09 10:54:01
+
+  # 自由な書式
+  call datetime-service.get_datetime {"format": "%Y/%-m/%-d (%a)"}
+  # 結果: 2024/12/10 (Tue)
   ```
 
 - Claudeデスクトップアプリのプロンプト例
@@ -167,6 +180,33 @@ uv cache clean mcp-datetime
 | log_compact  | 20241210_005401             | コンパクトなログ形式     |
 | time         | 00:54:01                    | 時刻のみの形式           |
 | time_jp      | 00時54分01秒                | 日本語の時刻形式         |
+| date_wareki         | 令和6年12月10日                   | 和暦の日付               |
+| datetime_wareki     | 令和6年12月10日 00時54分01秒      | 和暦の日時               |
+| date_wareki_short   | R6.12.10                          | 和暦の日付（略記）       |
+| date_jp_weekday     | 2024年12月10日（火）              | 曜日付きの日本語の日付   |
+| datetime_jp_weekday | 2024年12月10日（火） 00時54分01秒 | 曜日付きの日本語の日時   |
+| weekday_jp          | 火曜日                            | 日本語の曜日             |
+
+和暦は、日本がグレゴリオ暦を採用した1873年1月1日（明治6年）以降に対応しています。元号の1年目は「元年」と表記します（例: 令和元年5月1日）。ただし `date_wareki_short` では数字で表記します（R1.5.1）。
+
+## 自由な書式
+
+`format` に `%` が含まれている場合は、書式として扱います（200文字まで）。
+
+- 標準の[strftimeの記号](https://docs.python.org/ja/3/library/datetime.html#format-codes): `%Y %m %d %H %I %M %S %f %p %a %A %b %B %j %U %W %G %V %u %w %z %Z %c %x %X %%`
+- ゼロを付けない記号（Windowsでも使えます）: `%-m %-d %-H %-I %-M %-S %-j %-y`
+- 日本語の記号:
+
+| 記号  | 意味                         | 例（2019年5月1日） |
+| ----- | ---------------------------- | ------------------ |
+| `%Je` | 元号                         | 令和               |
+| `%JE` | 元号のローマ字の頭文字       | R                  |
+| `%Jy` | 和暦の年（1年は「元」）      | 元                 |
+| `%JY` | 和暦の年（1年も数字）        | 1                  |
+| `%Ja` | 曜日                         | 水                 |
+| `%JA` | 曜日                         | 水曜日             |
+
+例: `%Je%Jy年%-m月%-d日（%Ja）` → 令和元年5月1日（水）
 
 ## デバッグ
 

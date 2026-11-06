@@ -1,12 +1,12 @@
 [project]
 name = "mcp-datetime"
-version = "0.2.0"
-description = "A MCP server for datetime formatting and file name generation."
+version = "0.3.0"
+description = "A MCP server for datetime formatting, timezones, Japanese era (wareki) and file name generation."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["mcp>=2.3,<3"]
+dependencies = ["mcp>=2.3,<3", "tzdata; sys_platform == 'win32'"]
 license = "MIT"
-keywords = ["claude", "mcp", "datetime", "time", "format", "timezone"]
+keywords = ["claude", "mcp", "datetime", "time", "format", "timezone", "wareki", "japanese"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

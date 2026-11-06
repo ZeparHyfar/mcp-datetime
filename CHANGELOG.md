@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.0] - Unreleased
+### Added
+- `get_datetime` takes an optional `timezone` argument (IANA name such as `Asia/Tokyo` or `UTC`). Without it, the local timezone is used as before.
+- `format` accepts a custom pattern when it contains `%`: strftime directives, `%-m`-style directives without leading zeros that also work on Windows, and Japanese directives `%Je` `%JE` `%Jy` `%JY` `%Ja` `%JA`.
+- New formats: `date_wareki`, `datetime_wareki`, `date_wareki_short`, `date_jp_weekday`, `datetime_jp_weekday`, `weekday_jp`. Japanese era is supported from 1873-01-01.
+- `tzdata` is installed on Windows, which has no system timezone database.
+
+### Changed
+- The existing 18 formats and their output are unchanged.
+
 ## [0.2.0] - 2026-11-07
 ### Changed
 - Rewrote the server with `MCPServer` (the successor of FastMCP) from mcp 2.x. Requires `mcp>=2.3,<3`.
