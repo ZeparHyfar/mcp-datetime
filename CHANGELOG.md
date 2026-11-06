@@ -12,6 +12,7 @@
 
 ### Fixed
 - An unknown `format` value containing CR/LF could add forged lines to the server log (#8). The value is now quoted with `repr` and is no longer logged by this package.
+- On Windows with Python 3.10 and 3.11, formats with Japanese text (`date_jp`, `datetime_jp`, `time_jp`) raised `UnicodeEncodeError`. Only the `%` directives are now passed to `strftime`.
 
 ### Removed
 - The stray top-level `__init__.py`.

@@ -1,5 +1,6 @@
 """MCP server that returns the current date and time in fixed formats."""
 
+import re
 from datetime import datetime
 from importlib.metadata import version
 from typing import Annotated
@@ -38,12 +39,24 @@ FORMATS: dict[str, str] = {
     "time_jp": "%H時%M分%S秒",  # 00時54分01秒
 }
 
+_DIRECTIVE = re.compile(r"%.")
+
+
+def _strftime(dt: datetime, pattern: str) -> str:
+    """strftime that keeps non-ASCII text such as "年" out of strftime itself.
+
+    On Windows, Python before 3.12 raises UnicodeEncodeError when the pattern contains
+    characters the locale cannot encode, so only the directives are passed to strftime.
+    """
+    return _DIRECTIVE.sub(lambda m: dt.strftime(m.group()), pattern)
+
+
 _EXAMPLE = datetime.fromisoformat("2024-12-10T00:54:01.123456+09:00")
 
 GET_DATETIME_DESCRIPTION = (
     "Get the current date and time (local timezone of the machine running the server) "
     "in the given format.\n\nAvailable formats:\n"
-    + "\n".join(f"- {name}: {_EXAMPLE.strftime(pattern)}" for name, pattern in FORMATS.items())
+    + "\n".join(f"- {name}: {_strftime(_EXAMPLE, pattern)}" for name, pattern in FORMATS.items())
 )
 
 mcp = MCPServer("mcp-datetime", version=version("mcp-datetime"))
@@ -59,7 +72,7 @@ def format_datetime(format_type: str, now: datetime | None = None) -> str:
         )
     if now is None:
         now = datetime.now().astimezone()
-    return now.strftime(pattern)
+    return _strftime(now, pattern)
 
 
 @mcp.tool(name="get_datetime", description=GET_DATETIME_DESCRIPTION)
